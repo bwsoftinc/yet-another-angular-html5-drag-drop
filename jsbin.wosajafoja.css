@@ -1,0 +1,72 @@
+.box {
+  padding: 10px;
+  background: lightblue;
+  font-size: 20px;
+  width: 140px;
+  min-height: 30px;
+  text-align: center;
+  box-shadow: inset 0 0 0 5px white;
+  outline: 1px solid gray;
+  outline-offset: -5px;
+}
+
+.box .box {
+  width: 120px;
+  box-shadow: inset 0 0 0 5px transparent;
+}
+
+[ng-click] {
+  cursor:pointer;
+  font-size: 14px;  
+}
+
+.section {
+  display: table;
+  white-space: nowrap;
+  vertical-align: top;
+  background: white;
+  border: 1px solid gray;
+}
+
+.container {
+  white-space: nowrap;
+  display: inline-block;
+  min-width: 100px;
+  vertical-align: top;
+  background: white;
+  margin:5px;
+  border: 1px solid gray;
+}
+
+.hide { 
+  display: none;
+}
+
+.handle {
+  cursor: move;
+  float: left;
+  font-size: 16px;
+}
+
+.hover { 
+  outline: 1px dashed black;
+  outline-offset: -5px;
+}
+
+.drag {
+  opacity: 0.6;
+}
+
+.placeholder {
+  height: 30px;
+  background: lightgreen;
+  
+}
+
+.dragitem {
+  background: green;
+  box-shadow: unset;
+  padding:5px;
+  outline: unset;
+  border: 1px solid gray;
+}
