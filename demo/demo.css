@@ -1,0 +1,132 @@
+.boxwrapper {
+    padding: 5px;
+    margin: 0;
+}
+
+.box {
+    padding: 4px;
+    margin: 0;
+    background: lightskyblue;
+    font-size: 20px;
+    min-width: 140px;
+    min-height: 30px;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid gray;
+}
+.box ..boxwrapper {
+    padding:2px;
+}
+    .box .box {
+        min-width: 120px;
+
+    }
+
+[ng-click] {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.section {
+    display: table;
+    width: auto;
+    white-space: nowrap;
+    vertical-align: top;
+    background: white;
+    border: 1px solid gray;
+}
+
+.container {
+    white-space: nowrap;
+    display: inline-block;
+    width: auto;
+    vertical-align: top;
+    background: white;
+    margin: 5px;
+    border: 1px solid gray;
+}
+
+.hide {
+    display: none;
+}
+
+.handle {
+    cursor: move;
+    float: left;
+    margin-top: -2px;
+}
+
+.hover {
+    outline: 1px dashed black;
+    outline-offset: -4px;
+}
+
+.drag {
+    opacity: 0.6;
+}
+
+span {
+    font-size: 11px !important;
+    vertical-align: top;
+    float:right;
+}
+
+.placeholder {
+    min-height: 40px;
+    background: #58D68D;
+    opacity: 0.8;
+    box-shadow: inset 0 0 0 4px white;
+}
+
+.box .placeholder {    
+    box-shadow: inset 0 0 0 4px lightskyblue;
+}
+
+
+.dragitem {
+    opacity: 0.8;
+}
+
+.context {
+    position: absolute;
+    margin-top: -3px;
+    margin-right: -8px;
+    background: aliceblue;
+    display: inline-block;
+    width: 90px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid gray;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
+}
+.context div {
+    font-size: 14px;
+}
+
+.context:before, .context:after {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 16px;
+    border: solid transparent;
+    width: 0;
+    height: 0;    
+    clear: both;
+}
+
+.context:after {
+	border-right-color: aliceblue;
+	border-width: 8px;
+	margin-top: -8px;
+}
+
+.context:before {
+    border-right-color: gray;
+	border-width: 9px;
+	margin-top: -9px;
+}
+
+    .context div:hover{
+        text-shadow: 0 0 8px lightblue;
+        color: blue;
+    }

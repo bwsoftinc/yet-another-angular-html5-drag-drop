@@ -1,0 +1,94 @@
+body {
+    background-color: linen;
+}
+
+.container {
+    vertical-align: top;
+    margin: 20px;
+    display: inline-block;
+    border: 3px solid coral;
+    text-align: center;
+    display: inline-block;
+    border-radius: 5px;
+    background: white;
+}
+
+    .container .container {
+        margin: 3px;
+    }
+
+.header {
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.coral {
+    background-color: coral;
+}
+
+div {
+    white-space: nowrap;
+}
+
+ul {
+    padding: 0px;
+    display: block;
+    border-collapse: collapse;
+    border: 1px solid lightgray;
+    margin: 20px;
+    font-size: 0px;
+    min-height: 39px;
+    min-width: 176px;
+    list-style-type: none;
+}
+
+li {
+    background: white;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid lightgray;
+    font-size: 18px;
+    padding: 8px;
+    min-width: 160px;
+    user-select: none;
+    min-height: 23px;
+    margin: -1px -1px -1px -1px;
+}
+
+.placeholder {
+    background: lightgray;
+    min-height: 23px;
+}
+
+pre {
+    text-align: left;
+    margin: 0;
+    background: lightgray;
+    padding: 10px;
+    color: black;
+}
+
+.handle {
+    cursor: move;
+    float: left;
+}
+
+div[ng-controller] {
+    margin-bottom: 200px;
+}
+
+.source {
+    transition:all 0.3s ease;
+    box-shadow: inset 0 0 0 20px cornflowerblue;
+}
+
+.placeholder1, .dragitem {
+    background: linear-gradient(to bottom, #74d1ea 0%, #6495ed 50%, #74d1ea 100%);
+    height: 50px;
+}
+
+.drophover {
+    outline-offset: -2px;
+    outline: 3px dashed gray;
+}

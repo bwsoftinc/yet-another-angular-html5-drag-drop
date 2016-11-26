@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="../yaHTML5Sort.js"></script>
+    <script src="demo.js"></script>
+    <link rel="stylesheet" href="demo.css" />
+</head>
+<body ng-app="demo" ng-controller="DemoCtrl">
+    <div class="box">
+        <input type="checkbox" ng-checked="readonly" /> Readonly <input type="text" value="30" width="10" /> Items per list
+    </div>   
+
+    <div class="section" ng-repeat="mp in mealperiods" ng-hide="false">
+        <div ng-bind="mp.name"></div>
+        <div class="section" ng-repeat="st in mp.stations">
+            <div ng-bind="st.name"></div>
+            <div class="container" ng-repeat="day in st.days">
+                <div class="boxwrapper" ng-repeat="item in day track by item.id" ya-sort="sortoptions">
+                    <div class="box">
+                        <span class="handle">☰</span>{{item.name}}
+                        <div class="context" ng-if="item.context">
+                            <div ng-if="!item.sub" ng-click="makeCombo(item)">make combo</div>
+                            <div>edit</div>
+                            <div ng-click="makeCopy(item, day)">copy</div>
+                            <div ng-click="removeItem(item, day)">delete</div>
+                        </div>
+                        <span title="context" ng-click="showContext($event, item, this)">▼</span>
+                        <span title="expand" ng-if="item.sub" ng-click="item.exp=!item.exp">⇅</span>
+                        <div ng-if="item.exp">
+                            <div class="boxwrapper">
+                                <div class="box" ng-bind="item.sub[0].name"></div>
+                            </div>
+                            <div class="boxwrapper" ya-sort="sortoptions" ng-repeat="subi in item.sub | notfirst track by subi.id">
+                                <div class="box">
+                                    <span class="handle">☰</span>{{subi.name}}
+                                    <div class="context" ng-if="subi.context">
+                                        <div>edit</div>
+                                        <div ng-click="makeCopy(subi, item.sub)">copy</div>
+                                        <div ng-click="removeItem(subi, item.sub)">delete</div>
+                                    </div>
+                                    <span title="context" ng-click="showContext($event, subi, this)">▼</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="boxwrapper">
+                    <div class="box" ng-click="addItem(day, $index)">+add</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

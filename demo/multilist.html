@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="list.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="../yaHTML5Sort.js"></script>
+    <script type="text/javascript">
+        console.clear()
+        angular.module('demo', ['yaHTML5Sort'])
+        .controller('ctrl1', ['$scope', function ($scope) {
+
+            $scope.models = [];
+            $scope.models.push({ name: "List A", items: [] });
+            $scope.models.push({ name: "List B", items: [] });
+
+            for (var i = 1; i <= 3; i++) {
+                $scope.models[0].items.push({ id: Math.random(), name: "Item A " + i });
+                $scope.models[1].items.push({ id: Math.random(), name: "Item B " + i });
+            }
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
+            $scope.$watch('models', function (model) {
+                $scope.json = angular.toJson(model, true);
+            }, true);
+
+        }])
+        .controller('ctrl2', ['$scope', function ($scope) {
+
+            $scope.models = [];
+            $scope.models.push({ name: "List A", items: [] });
+            $scope.models.push({ name: "List B", items: [] });
+
+            for (var i = 1; i <= 3; i++) {
+                $scope.models[0].items.push({ id: Math.random(), name: "Item A " + i });
+                $scope.models[1].items.push({ id: Math.random(), name: "Item B " + i });
+            }
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder',
+                candrop: function (item, source, target) {
+                    return source === target;
+                }
+            };
+
+            $scope.$watch('models', function (model) {
+                $scope.json = angular.toJson(model, true);
+            }, true);
+
+        }])
+        .controller('ctrl3', ['$scope', function ($scope) {
+
+            $scope.models = [];
+            $scope.models.push({ name: "List A", items: [] });
+            $scope.models.push({ name: "List B", items: [] });
+
+            for (var i = 1; i <= 3; i++) {
+                $scope.models[0].items.push({ id: Math.random(), name: "Item A " + i });
+                $scope.models[1].items.push({ id: Math.random(), name: "Item B " + i });
+            }
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder',
+                candrop: function (item, source, target) {
+                    return source === target || target == $scope.models[1].items;
+                }
+            };
+
+            $scope.$watch('models', function (model) {
+                $scope.json = angular.toJson(model, true);
+            }, true);
+
+        }])
+         .controller('ctrl4', ['$scope', function ($scope) {
+
+             $scope.model = [];
+
+             for (var i = 1; i <= 3; i++) {
+                 $scope.model.push({ id: Math.random(), name: "Item A " + i });
+             }
+
+             $scope.options = {
+                 dropPlaceholderClass: 'placeholder'
+             };
+
+             $scope.$watch('model', function (model) {
+                 $scope.json = angular.toJson(model, true);
+             }, true);
+
+         }])
+        .controller('ctrl5', ['$scope', function ($scope) {
+
+            $scope.models = [];
+            $scope.models.push({ name: "List A", items: [] });
+            $scope.models.push({ name: "List B", items: [] });
+
+            for (var i = 1; i <= 3; i++) {
+                $scope.models[0].items.push({ id: Math.random(), name: "Item A " + i });
+                $scope.models[1].items.push({ id: Math.random(), name: "Item B " + i });
+            }
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
+        }]);
+    </script>
+</head>
+<body ng-app="demo">
+    <div ng-controller="ctrl1">
+        <H1>Compatible Lists</H1>
+        <div class="container">
+            <div class="header coral">{{models[0].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[0].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="border-color:cornflowerblue">
+            <div class="header" style="background:cornflowerblue">{{models[1].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[1].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+    <div ng-controller="ctrl2">
+        <H1>Incompatible Lists</H1>
+        <div class="container">
+            <div class="header coral">{{models[0].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[0].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="border-color:cornflowerblue">
+            <div class="header" style="background:cornflowerblue">{{models[1].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[1].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+    <div ng-controller="ctrl3">
+        <H1>One-way Lists</H1>
+        <div class="container">
+            <div class="header coral">{{models[0].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[0].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="border-color:cornflowerblue">
+            <div class="header" style="background:cornflowerblue">{{models[1].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[1].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+    <div ng-controller="ctrl4">
+        <H1>Mirrored List</H1>
+        <div class="container">
+            <div class="header coral">List A</div>
+            <ul>
+                <li ng-repeat="item in model track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container">
+            <div class="header coral">List A</div>
+            <ul>
+                <li ng-repeat="item in model track by item.id">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+    <div ng-controller="ctrl5">
+        <H1>Lists on Isolated Scopes (nested under parent ng-repeats)</H1>
+        <div class="container" ng-repeat="model in models">
+            <div class="header coral">{{model.name}}</div>
+            <ul>
+                <li ng-repeat="item in model.items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+            <div class="container" style="background:gray;border-color:gray">
+                <div class="header">Json model</div>
+                <pre>{{model.items | json}}</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

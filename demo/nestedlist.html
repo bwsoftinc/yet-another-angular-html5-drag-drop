@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="list.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="../yaHTML5Sort.js"></script>
+    <script type="text/javascript">
+        console.clear()
+        angular.module('demo', ['yaHTML5Sort'])
+        .controller('ctrl1', ['$scope', function ($scope) {
+
+            $scope.models = [];
+            $scope.models.push({ name: "List A", items: [] });
+            $scope.models.push({ name: "List B", items: [] });
+
+            for (var i = 1; i <= 3; i++) {
+                $scope.models[0].items.push({ id: Math.random(), name: "Item A " + i });
+                $scope.models[1].items.push({ id: Math.random(), name: "Item B " + i });
+            }
+
+            var suba = $scope.models[0].items[0].sub = { name: "Nested List A", items: [] };
+            var subb = $scope.models[1].items[2].sub = { name: "Nested List B", items: [] };
+            
+            for (var i = 1; i <= 3; i++) {
+                suba.items.push({ id: Math.random(), name: "Nested Item A " + i });
+                subb.items.push({ id: Math.random(), name: "Nested Item B " + i });
+            }
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
+            $scope.$watch('models', function (model) {
+                $scope.json = angular.toJson(model, true);
+            }, true);
+
+        }]);
+    </script>
+</head>
+<body ng-app="demo">
+    <script type="text/ng-template" id="item">
+        <span ng-if="!parent.sub">{{ parent.name }}</span>
+        <div class="container" style="border-color:cornflowerblue" ng-if="parent.sub">
+            <div class="header" style="background:cornflowerblue">{{parent.sub.name}}</div>
+            <ul>
+                <li ng-repeat="child in parent.sub.items" ng-include="'item'" ng-init="parent=child" ya-sort="options"></li>
+            </ul>
+        </div>
+    </script>
+
+    <div ng-controller="ctrl1">
+        <H1>Nested Lists</H1>
+        <div class="container">
+            <div class="header coral">{{models[0].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[0].items track by item.id" ya-sort="options" ng-include="'item'" ng-init="parent=item"></li>
+            </ul>
+        </div>
+        <div class="container">
+            <div class="header coral">{{models[1].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[1].items track by item.id" ya-sort="options" ng-include="'item'" ng-init="parent=item"></li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+</body>
+</html>
