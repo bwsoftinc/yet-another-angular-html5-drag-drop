@@ -26,7 +26,7 @@ angular.module('demo', ['yaHTML5Sort'])
                 return true;
 
             //subitems cannot exit own list, combo cannot be dragged into combo
-            else if(item.subi || (item.sub && target[0] && target[0].subi))
+            else if(item.subi || (item.sub && target.length && target[0].subi))
                 return false;
 
             return true;
