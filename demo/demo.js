@@ -14,7 +14,7 @@ angular.module('demo', ['yaHTML5Sort'])
     $scope.sortoptions = {
         dragHandleClass: 'handle',
         dragSourceItemClass: 'drag',
-        dropHoverItemClass: 'hover',
+        dropTargetItemClass: 'hover',
         dragItemClass: 'dragitem',
         dropPlaceholderClass: 'placeholder',
         candrag: function (sourceItem, sourceContainer) {

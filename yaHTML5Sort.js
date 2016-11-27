@@ -8,7 +8,7 @@ angular.module('yaHTML5Sort', [])
         },
         init: function (scope, attrs) {
             var options = {},
-                op = scope[attrs.yaSort]
+                op = scope[attrs.yaSort] || {},
                 match = attrs.ngRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+\|\s+([\s\S]+?))?(?:\s+as\s+([\s\S]+?))?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
 
             options.item =  match[1];
@@ -22,7 +22,7 @@ angular.module('yaHTML5Sort', [])
             options.candrop =  op.candrop || function () { return true; };
             options.dragHandleClass =  op.dragHandleClass || null;
             options.dragSourceItemClass =  op.dragSourceItemClass || null;
-            options.dropHoverItemClass =  op.dropHoverItemClass || null;
+            options.dropTargetItemClass =  op.dropTargetItemClass || null;
             options.dragItemClass =  op.dragItemClass || null;
             options.dropPlaceholderClass =  op.dropPlaceholderClass || null;
             options.itemArray =  scope.$eval(match[2], scope) || scope.$eval(match[2] + '=[]', scope);
@@ -85,7 +85,7 @@ angular.module('yaHTML5Sort', [])
                             root.placeholder = root.sourceNode.cloneNode(false);
                             root.placeholder.removeAttribute('ya-sort');
                             root.placeholder.classList.add(options.dropPlaceholderClass);
-                            root.placeholder.classList.add(options.dropHoverItemClass);
+                            root.placeholder.classList.add(options.dropTargetItemClass);
                             root.placeholder.classList.remove(options.dragSourceItemClass);
                         }
                     }
@@ -212,7 +212,7 @@ angular.module('yaHTML5Sort', [])
                     });
 
                     element.on('drop', function (e) {
-                        element.removeClass(options.dropHoverItemClass);
+                        element.removeClass(options.dropTargetItemClass);
                         e = e.originalEvent || e;
                         e.preventDefault();
                         e.stopPropagation();
@@ -242,8 +242,7 @@ angular.module('yaHTML5Sort', [])
                             if (e.ctrlKey && root.copy) {
                                 yaInstance.removePlaceholder();
                                 scope.$apply(function () {
-                                    if (!options.oncopy(copy, root.sourceArray, index, options.itemArray) &&
-                                       !options.onmove(copy, root.sourceArray, index, options.itemArray))
+                                    if (!options.oncopy(copy, root.sourceArray, index, options.itemArray))
                                         options.itemArray.splice(index, 0, copy);
                                 });
                                 yaInstance.clearDrop();
@@ -302,9 +301,9 @@ angular.module('yaHTML5Sort', [])
                         if (!root.sourceItem) return;
                         e = e.originalEvent || e;
 
-                        if (options.dropHoverItemClass && options.candrop(root.sourceItem, root.sourceArray, options.itemArray)) {
+                        if (options.dropTargetItemClass && options.candrop(root.sourceItem, root.sourceArray, options.itemArray)) {
                             if (options.replace && e.shiftKey && el !== root.sourceNode) {
-                                el.classList.add(options.dropHoverItemClass);
+                                el.classList.add(options.dropTargetItemClass);
                                 el.classList.add('yahover');
                             }
                             else
@@ -329,7 +328,7 @@ angular.module('yaHTML5Sort', [])
                         el.classList.remove('yahover');
                         $timeout(function () {
                             if (!el.classList.contains('yahover'))
-                                el.classList.remove(options.dropHoverItemClass);
+                                el.classList.remove(options.dropTargetItemClass);
                         }, 100);
                     });
                 }
