@@ -105,10 +105,62 @@
                 dropPlaceholderClass: 'placeholder'
             };
 
+        }]).controller('ctrl6', ['$scope', function ($scope) {
+
+            $scope.model = { name: "List A", items: [] };
+
+            for (var i = 1; i <= 3; i++)
+                $scope.model.items.push({ id: Math.random(), name: "Item A " + i });
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
+        }]).controller('ctrl7', ['$scope', function ($scope) {
+
+            $scope.model = { name: "List B", items: [] };
+
+            for (var i = 1; i <= 3; i++)
+                $scope.model.items.push({ id: Math.random(), name: "Item B " + i });
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
+        }]).controller('ctrl8', ['$scope', function ($scope) {
+
+            $scope.model = { name: "List A", items: [] };
+
+            for (var i = 1; i <= 3; i++)
+                $scope.model.items.push({ id: Math.random(), name: "Item A " + i });
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
         }]);
+
+        angular.module('demo2', ['yaHTML5Sort'])
+            .controller('ctrl9', ['$scope', function ($scope) {
+
+                $scope.model = { name: "List B", items: [] };
+
+                for (var i = 1; i <= 3; i++)
+                    $scope.model.items.push({ id: Math.random(), name: "Item B " + i });
+
+                $scope.options = {
+                    dropPlaceholderClass: 'placeholder'
+                };
+
+            }]);
+
+
+        angular.element(document).ready(function () { angular.bootstrap(document.getElementById("c8"), ['demo']); });
+        angular.element(document).ready(function () { angular.bootstrap(document.getElementById("c9"), ['demo2']); });
     </script>
 </head>
-<body ng-app="demo">
+<body>
+    <div ng-app="demo">
     <div ng-controller="ctrl1">
         <H1>Compatible Lists</H1>
         <div class="container">
@@ -186,7 +238,7 @@
         </div>
     </div>
     <div ng-controller="ctrl5">
-        <H1>Lists on Isolated Scopes (nested under parent ng-repeats)</H1>
+        <H1>Lists on Isolated Scopes (nested under parent ng-repeat)</H1>
         <div class="container" ng-repeat="model in models">
             <div class="header coral">{{model.name}}</div>
             <ul>
@@ -198,5 +250,53 @@
             </div>
         </div>
     </div>
+    <div>
+        <H1>Lists on Isolated Scopes (in separate controllers)</H1>
+        <div class="container" ng-controller="ctrl6">
+            <div class="header coral">List A</div>
+            <ul>
+                <li ng-repeat="item in model.items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+            <div class="container" style="background:gray;border-color:gray">
+                <div class="header">Json model</div>
+                <pre>{{model.items | json}}</pre>
+            </div>
+        </div>
+        <div class="container" ng-controller="ctrl7">
+            <div class="header coral">List B</div>
+            <ul>
+                <li ng-repeat="item in model.items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+            <div class="container" style="background:gray;border-color:gray">
+                <div class="header">Json model</div>
+                <pre>{{model.items | json}}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <H1>Lists on Isolated Scopes (in separate modules)</H1>
+    <div id="c8" class="container" ng-controller="ctrl8">
+        <div class="header coral">List A</div>
+        <ul>
+            <li ng-repeat="item in model.items track by item.id" ya-sort="options">{{item.name}}</li>
+        </ul>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{model.items | json}}</pre>
+        </div>
+    </div>
+    <div id="c9" class="container" ng-controller="ctrl9">
+        <div class="header coral">List B</div>
+        <ul>
+            <li ng-repeat="item in model.items track by item.id" ya-sort="options">{{item.name}}</li>
+        </ul>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{model.items | json}}</pre>
+        </div>
+    </div>
+</div>
+        
 </body>
 </html>

@@ -17,8 +17,8 @@ No dependency on jQuery.
 	* Static sibling html elements
 	* Drag handles
 	* Multiple collections
-	* Shared or isolated scopes per collection
 	* Nested collections
+	* Shared, or isolated scopes, across different controllers even modules
 * Styling
 	* Placeholder
 	* Drop target
