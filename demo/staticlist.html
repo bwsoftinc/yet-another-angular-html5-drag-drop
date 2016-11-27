@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="list.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="../yaHTML5Sort.js"></script>
+    <script type="text/javascript">
+        console.clear()
+        angular.module('demo', ['yaHTML5Sort'])
+        .controller('ctrl1', ['$scope', function ($scope) {
+
+            $scope.models = [];
+            $scope.models.push({ name: "List A", items: [] });
+            $scope.models.push({ name: "List B", items: [] });
+
+            for (var i = 1; i <= 3; i++)
+                $scope.models[0].items.push({ id: Math.random(), name: "Item A " + i });
+            $scope.models[1].items.push({ id: Math.random(), name: "Item B 1" });
+
+            $scope.options = {
+                dropPlaceholderClass: 'placeholder'
+            };
+
+            $scope.$watch('models', function (model) {
+                $scope.json = angular.toJson(model, true);
+            }, true);
+
+        }])
+         .controller('ctrl2', ['$scope', function ($scope) {
+
+             $scope.models = [];
+             $scope.models.push({ name: "List A", items: [] });
+             $scope.models.push({ name: "List A.2", items: [] });
+             $scope.models.push({ name: "List B", items: [] });
+             $scope.models.push({ name: "List B.2", items: [] });
+
+             for (var i = 1; i <= 3; i++) {
+                 $scope.models[0].items.push({ id: Math.random(), name: "Item A.1 " + i });
+                 $scope.models[1].items.push({ id: Math.random(), name: "Item A.2 " + i });
+                 $scope.models[2].items.push({ id: Math.random(), name: "Item B.1 " + i });
+             }
+
+             $scope.options = {
+                 dropPlaceholderClass: 'placeholder'
+             };
+
+             $scope.$watch('models', function (model) {
+                 $scope.json = angular.toJson(model, true);
+             }, true);
+
+         }]);
+    </script>
+</head>
+<body ng-app="demo">
+    <div ng-controller="ctrl1">
+        <H1>Static items in list</H1>
+        <div class="container">
+            <div class="header coral">{{models[0].name}}</div>
+            <ul>
+                <li>I am static, ng repeat below</li>
+                <li ng-repeat="item in models[0].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container">
+            <div class="header coral">{{models[1].name}}</div>
+            <ul>
+                <li>I am static</li>
+                <li>I am static, ng repeat below</li>
+                <li ng-repeat="item in models[1].items track by item.id" ya-sort="options">{{item.name}}</li>
+                <li>I am static, ng repeat above</li>
+                <li>I am static</li>
+                <li>I am static</li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+    <div ng-controller="ctrl2" ng-if="false">
+        <H1>Mutliple ng repeat separated by static item</H1>
+        <div class="container">
+            <div class="header coral">{{models[0].name}}</div>
+            <ul>
+                <li>I am static, ng repeat below</li>
+                <li ng-repeat="item in models[0].items track by item.id" ya-sort="options">{{item.name}}</li>
+                <li>I am static, ng repeat above and below</li>
+                <li ng-repeat="item in models[1].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container">
+            <div class="header coral">{{models[1].name}}</div>
+            <ul>
+                <li ng-repeat="item in models[2].items track by item.id" ya-sort="options">{{item.name}}</li>
+                <li>I am static, ng repeat above and below</li>
+                <li ng-repeat="item in models[3].items track by item.id" ya-sort="options">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="container" style="background:gray;border-color:gray">
+            <div class="header">Json model</div>
+            <pre>{{json}}</pre>
+        </div>
+    </div>
+</body>
+</html>

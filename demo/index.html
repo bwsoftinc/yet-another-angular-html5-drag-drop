@@ -7,18 +7,20 @@
     <link rel="stylesheet" href="demo.css" />
 </head>
 <body ng-app="demo" ng-controller="DemoCtrl">
-    <div class="box">
-        <input type="checkbox" ng-checked="readonly" /> Readonly <input type="text" value="30" width="10" /> Items per list
-    </div>   
+    <div class="box" style="width:500px">
+        <!-- <input type="checkbox" ng-checked="readonly" /> Readonly -->
+        <input type="text" style="width:60px" ng-model="itemsper" /> items per list ({{itemsper * 5 * 6}} total items)
+        <button ng-click="reload()">Load</button>
+    </div> <br /><br />
 
-    <div class="section" ng-repeat="mp in mealperiods" ng-hide="false">
-        <div ng-bind="mp.name"></div>
-        <div class="section" ng-repeat="st in mp.stations">
-            <div ng-bind="st.name"></div>
-            <div class="container" ng-repeat="day in st.days">
+    <div class="section" ng-repeat="mp in mealperiods">
+        <div class="header" ng-click="mp.collapse=!mp.collapse" title="collapse">{{::mp.name}}</div>
+        <div class="section" ng-if="!mp.collapse" ng-repeat="st in mp.stations">
+            <div class="header" ng-click="st.collapse=!st.collapse" title="collapse">{{::st.name}}</div>
+            <div class="container" ng-if="!st.collapse" ng-repeat="day in st.days">{{'day' + $index}}
                 <div class="boxwrapper" ng-repeat="item in day track by item.id" ya-sort="sortoptions">
                     <div class="box">
-                        <span class="handle">☰</span>{{item.name}}
+                        <span class="handle">☰</span>{{::item.name}}
                         <div class="context" ng-if="item.context">
                             <div ng-if="!item.sub" ng-click="makeCombo(item)">make combo</div>
                             <div>edit</div>
@@ -29,11 +31,11 @@
                         <span title="expand" ng-if="item.sub" ng-click="item.exp=!item.exp">⇅</span>
                         <div ng-if="item.exp">
                             <div class="boxwrapper">
-                                <div class="box" ng-bind="item.sub[0].name"></div>
+                                <div class="box">{{::item.sub[0].name}}</div>
                             </div>
                             <div class="boxwrapper" ya-sort="sortoptions" ng-repeat="subi in item.sub | notfirst track by subi.id">
                                 <div class="box">
-                                    <span class="handle">☰</span>{{subi.name}}
+                                    <span class="handle">☰</span>{{::subi.name}}
                                     <div class="context" ng-if="subi.context">
                                         <div>edit</div>
                                         <div ng-click="makeCopy(subi, item.sub)">copy</div>

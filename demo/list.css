@@ -1,5 +1,5 @@
 body {
-    background-color: linen;
+    background-color: ghostwhite;
 }
 
 .container {
@@ -14,7 +14,7 @@ body {
 }
 
     .container .container {
-        margin: 3px;
+        margin: 8px;
     }
 
 .header {

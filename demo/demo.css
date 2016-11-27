@@ -14,12 +14,11 @@
     border-radius: 6px;
     border: 1px solid gray;
 }
-.box ..boxwrapper {
+.box .boxwrapper {
     padding:2px;
 }
     .box .box {
         min-width: 120px;
-
     }
 
 [ng-click] {
@@ -32,8 +31,26 @@
     width: auto;
     white-space: nowrap;
     vertical-align: top;
-    background: white;
-    border: 1px solid gray;
+}
+
+.section .section {
+    border: 1px solid darkgray;
+}
+
+.section .header {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: black;
+    padding: 8px;
+    color: white;
+}
+
+.section .section .header {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: darkgray;
+    padding: 6px;
+    color: black;
 }
 
 .container {
@@ -43,7 +60,7 @@
     vertical-align: top;
     background: white;
     margin: 5px;
-    border: 1px solid gray;
+    outline: 1px solid gray;
 }
 
 .hide {

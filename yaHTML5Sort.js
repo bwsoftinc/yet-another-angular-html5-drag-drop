@@ -1,6 +1,7 @@
 angular.module('yaHTML5Sort', [])
 .service('yaInstance', function () {
     var instances = [{}];
+    var root = instances[0];
     return {
         get: function (index) {
             return instances[index];
@@ -12,7 +13,6 @@ angular.module('yaHTML5Sort', [])
 
             options.item =  match[1];
             options.items =  match[2];
-            options.placeholder = null;
             options.copy = op.oncopy !== undefined;
             options.replace = op.onreplace !== undefined;
             options.candrag =  op.candrag || function () { return true; };
@@ -31,26 +31,25 @@ angular.module('yaHTML5Sort', [])
             return options;
         },
         clearDrop: function () {
-            var instance = instances[0];
-            instance.sourceNode = null;
-            instance.sourceItem = null;
-            instance.sourceArray = null;
-            instance.copy = null;
+            root.sourceNode = null;
+            root.sourceItem = null;
+            root.sourceArray = null;
+            root.copy = null;
         },
-        removePlaceholder: function (options) {
-            if (options.placeholder && options.placeholder.parentNode) {
-                options.placeholder.parentNode.removeChild(options.placeholder);
-                options.placeholder = null;
+        removePlaceholder: function (container) {
+            if (root.placeholder && root.placeholder.parentNode &&
+               (!container || root.placeholder.parentElement === container)) {            
+                root.placeholder.parentNode.removeChild(root.placeholder);
+                root.placeholder = null;
             }
         },
         placeholderIndex: function (options) {
-            return Array.prototype.indexOf.call(options.placeholder.parentNode.children, options.placeholder);
+            return Array.prototype.indexOf.call(root.placeholder.parentNode.children, root.placeholder);
         }
     };
 })
-//has to run before ng-repeat, so things can be sniffed and initialized before ngrepeat possibly removes them.
-//the ya-sort options are initialized for this instance and drag-drop events attached to the node containing
-//the ngrepeat declaration
+//has to run before ng-repeat (priority 1000) so ngRepeat directive can be sniffed and yaSort initialized before ngRepeat has a chance to remove this dom node
+//the ya-sort options are initialized for this instance and drag-drop events attached to the node containing (parent Element) the yaSort directive
 .directive('yaSort', ['$timeout', 'yaInstance', function ($timeout, yaInstance) {
     return {
         priority: 1001,
@@ -70,9 +69,10 @@ angular.module('yaHTML5Sort', [])
                         container.removeClass('yadragtarget');
 
                         $timeout(function () {
-                            if (!container.hasClass('yadragtarget'))
-                                yaInstance.removePlaceholder(options);
-                        }, 60);
+                            if (!container.hasClass('yadragtarget')) {
+                                yaInstance.removePlaceholder(_container);
+                            }
+                        }, 100);
                     });
 
                     container.on('dragstart dragenter', function (e) {
@@ -80,49 +80,79 @@ angular.module('yaHTML5Sort', [])
                         e.preventDefault();
                     });
 
+                    function ensurePlaceholder() {
+                        if (!root.placeholder) {
+                            root.placeholder = root.sourceNode.cloneNode(false);
+                            root.placeholder.removeAttribute('ya-sort');
+                            root.placeholder.classList.add(options.dropPlaceholderClass);
+                            root.placeholder.classList.add(options.dropHoverItemClass);
+                            root.placeholder.classList.remove(options.dragSourceItemClass);
+                        }
+                    }
+
+                    function findRepeat(item, upperhalf) {
+                        var search = item;
+
+                        //try up first if in upper half
+                        if (upperhalf) {
+                            while (search = search.previousSibling)
+                                if (search.nodeType === 8 && search.data.indexOf('ngRepeat:') > 0)
+                                    break;
+                        }
+
+                        //else search down
+                        if (!upperhalf || search === null) {
+                            search = item;
+                            while (search = search.nextSibling)
+                                if (search.nodeType === 8 && search.data.indexOf('ngRepeat:') > 0)
+                                    break;
+                        }
+
+                        //try up again if not already tried
+                        if (search === null && !upperhalf) {
+                            search = item;
+                            while (search = search.previousSibling)
+                                if (search.nodeType === 8 && search.data.indexOf('ngRepeat:') > 0)
+                                    break;
+                        }
+
+                        return search;
+                    }
+
                     container.on('dragover', function (e) {
                         if (!root.sourceItem) return;
                         e = e.originalEvent || e;
-                        container.addClass('yadragtarget');
+                        _container.classList.add('yadragtarget');
 
                         var item = event.target;
-                        if (item !== _container)
+                        var iscontainer = item === _container;
+                        if (!iscontainer)
                             while (item.parentElement !== _container)
                                 item = item.parentElement;
 
                         var notcompatible = !options.candrop(root.sourceItem, root.sourceArray, options.itemArray);
-                        if (notcompatible || (item === _container && options.itemArray.length) || (options.replace && e.shiftKey && item === root.sourceNode))
+                        if (notcompatible || iscontainer || (options.replace && e.shiftKey && item === root.sourceNode))
                             e.dataTransfer.dropEffect = 'none';
                         else
                             e.dataTransfer.dropEffect = (e.ctrlKey && root.copy) ? 'copy' : 'move';
 
-                        if ((e.shiftKey && options.replace) || notcompatible) {
-                            yaInstance.removePlaceholder(options);
-                        } else if (item !== options.placeholder && (item !== _container || !options.itemArray.length)) {
-                            if (!options.placeholder) {
-                                options.placeholder = root.sourceNode.cloneNode(false);
-                                options.placeholder.removeAttribute('ng-repeat');
-                                options.placeholder.classList.add(options.dropPlaceholderClass);
-                                options.placeholder.classList.add(options.dropHoverItemClass);
-                                options.placeholder.classList.remove(options.dragSourceItemClass);
+                        if ((e.shiftKey && options.replace) || notcompatible || iscontainer)
+                            yaInstance.removePlaceholder(_container);
+                        else if (item !== root.placeholder) {
+                            var upperhalf = e.offsetY < item.offsetHeight / 2;
+                            ensurePlaceholder();
 
+                            //over static node or container
+                            if (!item.hasAttribute('ya-sort')) {
+                                var search = findRepeat(item, upperhalf);
+
+                                if (search != null)
+                                    search.parentNode.insertBefore(root.placeholder, search.nextSibling);
                             }
-
-                            if (!item.hasAttribute('ng-repeat')) {
-                                var doprev = false;
-                                while ((item = item.previousSibling))
-                                    if ((doprev = (item.nodeType === 8 && item.data.indexOf('ngRepeat') > 0)))
-                                        break;
-
-                                if (doprev)
-                                    _container.insertBefore(options.placeholder, item.nextSibling);
-                                else
-                                    _container.appendChild(options.placeholder);
-                            }
-                            else if (e.offsetY < item.offsetHeight / 2)
-                                item.parentNode.insertBefore(options.placeholder, item);
+                            else if (upperhalf)
+                                item.parentNode.insertBefore(root.placeholder, item);
                             else
-                                item.parentNode.insertBefore(options.placeholder, item.nextSibling);
+                                item.parentNode.insertBefore(root.placeholder, item.nextSibling);
                         }
 
                         e.preventDefault();
@@ -139,14 +169,14 @@ angular.module('yaHTML5Sort', [])
                         var copy = JSON.parse(JSON.stringify(root.sourceItem));
 
                         if (e.ctrlKey && root.copy) {
-                            yaInstance.removePlaceholder(options);
+                            yaInstance.removePlaceholder();
                             scope.$apply(function () {
                                 if (!options.oncopy(copy, root.sourceArray, index, options.itemArray))
                                     options.itemArray.splice(index, 0, copy);
                             });
-                        } else if (options.placeholder !== root.sourceNode.previousElementSibling &&
-                           root.sourceNode.nextElementSibling !== options.placeholder) {
-                            yaInstance.removePlaceholder(options);
+                        } else if (root.placeholder !== root.sourceNode.previousElementSibling &&
+                           root.sourceNode.nextElementSibling !== root.placeholder) {
+                            yaInstance.removePlaceholder();
                             scope.$apply(function () {
                                 if (!options.onmove(copy, root.sourceArray, index, options.itemArray)) {
                                     options.itemArray.splice(index, 0, copy);
@@ -154,7 +184,7 @@ angular.module('yaHTML5Sort', [])
                                 }
                             });
                         } else {
-                            yaInstance.removePlaceholder(options);
+                            yaInstance.removePlaceholder();
                         }
                     });
                 }
@@ -210,20 +240,20 @@ angular.module('yaHTML5Sort', [])
                             var item = scope[options.item];
                             var index = yaInstance.placeholderIndex(options);
                             if (e.ctrlKey && root.copy) {
-                                yaInstance.removePlaceholder(options);
+                                yaInstance.removePlaceholder();
                                 scope.$apply(function () {
                                     if (!options.oncopy(copy, root.sourceArray, index, options.itemArray) &&
                                        !options.onmove(copy, root.sourceArray, index, options.itemArray))
                                         options.itemArray.splice(index, 0, copy);
                                 });
                                 yaInstance.clearDrop();
-                            } else if (root.sourceNode.nextElementSibling === options.placeholder ||
-                               root.sourceNode.previousElementSibling === options.placeholder ||
+                            } else if (root.sourceNode.nextElementSibling === root.placeholder ||
+                               root.sourceNode.previousElementSibling === root.placeholder ||
                                root.item === item) {
-                                yaInstance.removePlaceholder(options);
+                                yaInstance.removePlaceholder();
                                 yaInstance.clearDrop();
                             } else {
-                                yaInstance.removePlaceholder(options);
+                                yaInstance.removePlaceholder();
                                 scope.$apply(function () {
                                     if (!options.onmove(copy, root.sourceArray, index, options.itemArray))
                                         options.itemArray.splice(index, 0, copy);
@@ -273,10 +303,12 @@ angular.module('yaHTML5Sort', [])
                         e = e.originalEvent || e;
 
                         if (options.dropHoverItemClass && options.candrop(root.sourceItem, root.sourceArray, options.itemArray)) {
-                            if (options.replace && e.shiftKey && el !== root.sourceNode)
-                                element.addClass(options.dropHoverItemClass);
+                            if (options.replace && e.shiftKey && el !== root.sourceNode) {
+                                el.classList.add(options.dropHoverItemClass);
+                                el.classList.add('yahover');
+                            }
                             else
-                                element.removeClass(options.dropHoverItemClass);
+                                el.classList.remove('yahover');
                         }
                     });
 
@@ -293,8 +325,12 @@ angular.module('yaHTML5Sort', [])
 
                     element.on('dragleave', function (e) {
                         e = e.originalEvent || e;
-                        if(e.target === el)
-                            element.removeClass(options.dropHoverItemClass);
+
+                        el.classList.remove('yahover');
+                        $timeout(function () {
+                            if (!el.classList.contains('yahover'))
+                                el.classList.remove(options.dropHoverItemClass);
+                        }, 100);
                     });
                 }
             };

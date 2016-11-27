@@ -12,7 +12,6 @@ angular.module('demo', ['yaHTML5Sort'])
 .controller('DemoCtrl', ['$scope', '$document', '$timeout', function ($scope, $document, $timeout) {
 
     $scope.sortoptions = {
-        //disabled: true,
         dragHandleClass: 'handle',
         dragSourceItemClass: 'drag',
         dropHoverItemClass: 'hover',
@@ -23,53 +22,60 @@ angular.module('demo', ['yaHTML5Sort'])
         },
         candrop: function (item, source, target) {
             //any item can drop to it's own list
-            if (source === target || !item.sub) 
+            if (source === target) 
                 return true;
 
-            //combo sub items can only drag to themselves
-            //if(sourceScope.$parent.$parent.$yaSort && sourceScope.$parent[sourceScope.$parent.$parent.$yaSort.item].sub) 
-            //    return false;
-
-            //combo cannot drag into combo
-            //if (targetScope.$parent.$parent.$yaSort && targetScope.$parent[targetScope.$parent.$parent.$yaSort.item].sub && item.sub) 
-            //    return false;
+            //subitems cannot exit own list, combo cannot be dragged into combo
+            else if(item.subi || (item.sub && target[0] && target[0].subi))
+                return false;
 
             return true;
         },
         oncopy: function (item, source, targetIndex, target) {
-            source.id = Math.random();
+            item.id = Math.random();
+            if (target[0] && target[0].subi)
+                item.subi = true;
         },
         onmove: function (item, souorce, targetIndex, target) {
-            source.id = Math.random();
+            item.id = Math.random();
+            if (target[0] && target[0].subi)
+                item.subi = true;
         },
         onreplace: function (item, source, targetIndex, target) {
-            source.id = Math.random();
+            item.id = Math.random();
+            if (target[0] && target[0].subi)
+                item.subi = true;
         }
     };
 
-    $scope.mealperiods = [];
-    for (var m = 0; m < 3; m++) {
-        var stations = [];
-        for (var s = 0; s < 3; s++) {
-            var days = [];
-            for (var day = 1; day < 7; day++) {
-                days[day] = [];
-                for (var i = 0; i < 30; i++) {
-                    var rand = Math.trunc(Math.random() * 10);
-                    if (rand <= 2) {
-                        var sub = [];
-                        for (var j = 0; j <= rand * 2; j++)
-                            sub[j] = { "id": Math.random(), "name": " sub " + j };
-                        days[day][i] = { "id": Math.random(), "name": " Combo " + day + "." + i, "sub": sub };
+    $scope.itemsper = 18;
+    $scope.reload = function () {
+        $scope.mealperiods = [];
+        for (var m = 0; m < 2; m++) {
+            var stations = [];
+            for (var s = 0; s < 3; s++) {
+                var days = [];
+                for (var day = 1; day < 6; day++) {
+                    days[day] = [];
+                    for (var i = 0; i < $scope.itemsper; i++) {
+                        var rand = Math.round(Math.random() * 10);
+                        if (rand <= 2) {
+                            var sub = [];
+                            for (var j = 0; j <= rand * 2; j++)
+                                sub[j] = { id: Math.random(), name: " sub " + j, subi: true };
+                            days[day][i] = { id: Math.random(), name: " Combo " + day + "." + i, sub: sub };
+                        }
+                        else
+                            days[day][i] = { id: Math.random(), name: " Item " + day + "." + i };
                     }
-                    else
-                        days[day][i] = { "id": Math.random(), "name": " Item " + day + "." + i };
                 }
+                days[6] = [];
+                stations[s] = { id: Math.random(), name: "Station " + s, days: days };
             }
-            stations[s] = { "id": Math.random(), "name": "Station " + s, "days": days };
+            $scope.mealperiods[m] = { id: Math.random(), name: "Mealperiod " + m, stations: stations };
         }
-        $scope.mealperiods[m] = { "id": Math.random(), "name": "Mealperiod " + m, "stations": stations };
     }
+    $scope.reload();
 
     $document.on('click', function (e) {
         if ($scope.context && lock) {
