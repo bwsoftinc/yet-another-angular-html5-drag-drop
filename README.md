@@ -1,6 +1,6 @@
 #yet-another-angular-html5-drag-drop
 
-[*See live demos*](#live-demos)  
+[**See live demos**](#live-demos)  
 Angular directive to enable drag and drop features on ng-repeat collections.  
 Implemented using the HTML5 draggable api, javascript and angularJS.  
 No dependency on jQuery.
@@ -9,7 +9,8 @@ No dependency on jQuery.
 
 * Move, Copy and Replace drag and drop actions.
 * Simple to use and set up with a single directive.
-* Default callbacks that update the dom and underlying angular model.
+* Powerful options advanced control
+* Default callbacks that automatically update the dom and underlying angular model.
 * User definable callbacks that work in tandem with or override default callbacks.
 * Supports 
 	* Various html elements
@@ -49,12 +50,12 @@ Supply options by adding a value to the `ya-sort` directive
 <div ng-repeat="item in items" ya-sort="myOptions">
 ```
 
-##The options parameter
+##The options parameter (optional)
 
-Declare one or more objects on the angular controller's scope.  
-These options obects can be passed as the `ya-sort` directive's value.
+Declare one or more options objects on the angular controller's scope.  
+These options objects can be passed as the `ya-sort` directive value on one or more instances of `ya-sort`
 ```Javascript
-module.controller('myController', function($scope){
+module.controller('myController', function($scope) {
 	$scope.myOptions = {
 		dragHandleClass = 'handle',
 		//more options...
@@ -75,7 +76,7 @@ module.controller('myController', function($scope){
 
 ###Define one or more of these callback function prototypes
 
-####candrag(item) triggered on ondragstart event
+####`candrag(item)` triggered on ondragstart event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
@@ -85,7 +86,7 @@ module.controller('myController', function($scope){
 Notes
 * if not defined dragging will be allowed on any `ya-sort` item
 
-####candrop(item, sourceArray, targetArray) triggered ondragover event
+####`candrop(item, sourceArray, targetArray)` triggered ondragover event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
@@ -97,7 +98,7 @@ Notes
 Notes
 * If not defined dropping will be allowed in any `ya-sort` instance 
 	
-####onmove(item, sourceArray, targetIndex, targetArray) triggered ondrop event
+####`onmove(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
@@ -111,7 +112,7 @@ Notes
 * `item` is a copy so changes can be made, webapi's called, id's updated, or item completely replaced with another without affecting the object model
 * Default action is removing the orginal `item` from `sourceArray` and inserting to `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
 
-####oncopy(item, sourceArray, targetIndex, targetArray) triggered ondrop event
+####`oncopy(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
@@ -127,7 +128,7 @@ Notes
 * Default action is inserting `item` into `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
 * When both `oncopy` and `onreplace` functions are defined and the user action (control+shift+drag) makes use of both features, then `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
 
-####onreplace(item, sourceArray, targetIndex, targetArray) triggered ondrop event
+####`onreplace(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
@@ -141,7 +142,7 @@ Notes
 * `item` is a copy so changes can be made, webapi's called, id's updated, or item completely replaced with another without affecting the object model
 * Defining the `onreplace` function enables the replace (shift+drag) feature
 * Default action is removing the original `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
-* When both `oncopy` and `onreplace` functions are defined and the user action (control+shift+drag) makes use of both features, then `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
+* When both `oncopy` and `onreplace` functions are defined and the user action (control+shift+drag) makes use of both features, then both `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
 
 ##License
 
