@@ -93,6 +93,9 @@ angular.module('yaHTML5Sort', [])
                     function findRepeat(item, upperhalf) {
                         var search = item;
 
+                        if (search.nodeType === 8 && search.data.indexOf('ngRepeat:') > 0)
+                            return search;
+
                         //try up first if in upper half
                         if (upperhalf) {
                             while (search = search.previousSibling)
@@ -130,20 +133,25 @@ angular.module('yaHTML5Sort', [])
                             while (item.parentElement !== _container)
                                 item = item.parentElement;
 
+                        var empty = options.itemArray.length === 0;
+                        var containerhasitems = iscontainer && !empty;
                         var notcompatible = !options.candrop(root.sourceItem, root.sourceArray, options.itemArray);
-                        if (notcompatible || iscontainer || (options.replace && e.shiftKey && item === root.sourceNode))
+                        if (notcompatible || containerhasitems || (options.replace && e.shiftKey && item === root.sourceNode))
                             e.dataTransfer.dropEffect = 'none';
                         else
                             e.dataTransfer.dropEffect = (e.ctrlKey && root.copy) ? 'copy' : 'move';
 
-                        if ((e.shiftKey && options.replace) || notcompatible || iscontainer)
+                        if ((e.shiftKey && options.replace) || notcompatible || containerhasitems)
                             yaInstance.removePlaceholder(_container);
                         else if (item !== root.placeholder) {
                             var upperhalf = e.offsetY < item.offsetHeight / 2;
                             ensurePlaceholder();
 
                             //over static node or container
-                            if (!item.hasAttribute('ya-sort')) {
+                            if ( iscontainer && empty)
+                                item = item.firstChild;
+
+                            if (!item.hasAttribute || !item.hasAttribute('ya-sort')) {
                                 var search = findRepeat(item, upperhalf);
 
                                 if (search != null)

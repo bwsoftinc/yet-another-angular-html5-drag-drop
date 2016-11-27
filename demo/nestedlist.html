@@ -27,8 +27,25 @@
             }
 
             $scope.options = {
-                dropPlaceholderClass: 'placeholder'
+                dropPlaceholderClass: 'placeholder',
+                candrop: function (item, source, target) {
+                    if (!item.sub) return true;
+                                        
+                    //cannot drop nested list into itself or a child nested list
+                    return !searchfor(item.sub.items, target)
+                }
             };
+
+            function searchfor(arr, item) {
+                if (arr === item)
+                    return true;
+
+                for (var i = 0; i < arr.length; i++)
+                    if (arr[i].sub && searchfor(arr[i].sub.items, item))
+                            return true;
+
+                return false;
+            }
 
             $scope.$watch('models', function (model) {
                 $scope.json = angular.toJson(model, true);

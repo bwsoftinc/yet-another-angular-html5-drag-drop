@@ -112,11 +112,11 @@ angular.module('demo', ['yaHTML5Sort'])
     };
 
     $scope.addItem = function (arr, idx) {
-        arr.push({ "id": Math.random(), "name": " Item " + idx + "." + arr.length });
+        arr.push({ id: Math.random(), name: " Item " + idx + "." + arr.length });
     };
 
     $scope.makeCombo = function (item) {
-        item.sub = [{ 'id': Math.random(), 'name': 'Sub 0' }]
+        item.sub = [{ id: Math.random(), name: 'Sub 0', subi: true }]
         item.name = ' Combo' + item.name.substring(5);
     };
 
