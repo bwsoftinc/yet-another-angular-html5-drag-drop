@@ -29,6 +29,7 @@ No dependency on jQuery.
 
 * [Simple List](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/simplelist.html)
 * [Styled List](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/stylelist.html)
+* [Static Items in List](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/staticlist.html)
 * [Mulitple Lists](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/multilist.html)
 * [Nested Lists](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/nestedlist.html)
 * [Advanced Demo](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/index.html)
