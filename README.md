@@ -1,8 +1,8 @@
 #yet-another-angular-html5-drag-drop
 
-[See live demos](##live-demos)
-Angular directive to enable drag and drop features on ng-repeat collections.
-Implemented using the HTML5 draggable api, javascript and angularJS.
+[*See live demos*](#live-demos)  
+Angular directive to enable drag and drop features on ng-repeat collections.  
+Implemented using the HTML5 draggable api, javascript and angularJS.  
 No dependency on jQuery.
 
 ##Features
@@ -142,8 +142,6 @@ Notes
 * Defining the `onreplace` function enables the replace (shift+drag) feature
 * Default action is removing the original `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
 * When both `oncopy` and `onreplace` functions are defined and the user action (control+shift+drag) makes use of both features, then `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
-
-options.onreplace =  op.onreplace || function () { return false; };
 
 ##License
 
