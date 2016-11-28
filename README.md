@@ -10,7 +10,7 @@ No dependency on jQuery.
 * Move, Copy and Replace drag and drop actions.
 * Simple to use and set up with a single directive.
 * Powerful options offer advanced control.
-* Default callbacks that automatically update the dom and underlying angular model.
+* Default callbacks that automatically update the dom and underlying model(s).
 * User definable callbacks that work in tandem with or override default callbacks.
 * Supports 
 	* Various html elements
@@ -84,8 +84,8 @@ module.controller('myController', function($scope) {
 | item         | object  | The object model of the item attempting to be dragged  |
 | return       | boolean | Whether dragging should commence for this item         |
 
-Notes
-* if not defined dragging will be allowed on any `ya-sort` item
+Remarks
+* If not defined dragging will be allowed on any `ya-sort` item.
 
 ####`candrop(item, sourceArray, targetArray)` triggered ondragover event
 
@@ -96,21 +96,25 @@ Notes
 | targetArray  | array   | The array model where `item` would be dropped          |
 | return       | boolean | Whether the drop should be allowed here                |
 
-Notes
-* If not defined dropping will be allowed in any `ya-sort` instance 
+Remarks
+* If not defined dropping will be allowed in any `ya-sort` instance.
 	
 ####`onmove(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
-| item         | object  | A copy of the object model of the item being dropped   |
-| sourceArray  | array   | The array model that contains the original `item`      |
-| targetIndex  | int     | The index in `targetArray` where move is being made    |
+| item         | object  | The object model of the item being dropped             |
+| sourceArray  | array   | The array model that contains `item`                   |
+| targetIndex  | int     | The index in `targetArray` where move is being placed  |
 | targetArray  | array   | The array model where `item` is being dropped          |
 | return       | boolean | Whether default action was handled                     |
 
-Notes
-* Default action is removing the orginal `item` from `sourceArray` and inserting to `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
+Remarks
+* Default action is removing `item` from `sourceArray` and inserting to `targetArray` at `targetIndex`.
+* Define `onmove` to perform additional actions such as calling a webapi and updating this or other item properties in the arrays.
+* Javascript function parameters are not by reference so update `item`'s properties freely, assiging `item` to another object in `onmove` will not work.
+* Return true to then proceed with the default action.
+* If the default action is undesirable then return true signaling the default action was handled in user code.
 
 ####`oncopy(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
@@ -118,29 +122,29 @@ Notes
 |--------------|---------|--------------------------------------------------------|
 | item         | object  | A copy of the object model of the item being dropped   |
 | sourceArray  | array   | The array model that contains the original `item`      |
-| targetIndex  | int     | The index in `targetArray` where copy is being made    |
+| targetIndex  | int     | The index in `targetArray` where copy is being placed  |
 | targetArray  | array   | The array model where `item` is being dropped          |
 | return       | boolean | Whether default action was handled                     |
 
-Notes
-* Here, `item` is already a copy so changes can be made, webapi's called, properties updated will only affect the target and not the original
-* Defining the `oncopy` function enables the copy (_control+drag_) feature
-* Default action is inserting `item` into `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
-* When both `oncopy` and `onreplace` functions are defined and the user action (_control+shift+drag_) makes use of both features, then `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
+Remarks
+* Defining the `oncopy` function enables the copy (_control+drag_) feature.
+* Here, `item` is already a copy so properties can be updated and will only affect the target and not the original.
+* Default action is inserting the copy of `item` into `targetArray` at `targetIndex`.
+* When both `oncopy` and `onreplace` functions are defined and the user action (_control+shift+drag_) makes use of both features, then both `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
 
 ####`onreplace(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
 |--------------|---------|--------------------------------------------------------|
-| item         | object  | A copy of the object model of the item being dropped   |
-| sourceArray  | array   | The array model that contains the original `item`      |
+| item         | object  | The object model of the item being dropped             |
+| sourceArray  | array   | The array model that contains `item`                   |
 | targetIndex  | int     | The index in `targetArray` where replace is being made |
 | targetArray  | array   | The array model where `item` is being dropped          |
 | return       | boolean | Whether default action was handled                     |
 
-Notes
-* Defining the `onreplace` function enables the replace (_shift+drag_) feature
-* Default action is removing the original `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`. If some other action is necessary or default action undesirable then return true signaling the default action was handled in user code.
+Remarks
+* Defining the `onreplace` function enables the replace (_shift+drag_) feature.
+* Default action is removing the original `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`.
 * When both `oncopy` and `onreplace` functions are defined and the user action (_control+shift+drag_) makes use of both features, then both `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
 
 ##License
