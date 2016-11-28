@@ -54,7 +54,7 @@ Supply options by adding a value to the `ya-sort` directive
 ##The options parameter (optional)
 
 Declare one or more options objects on the angular controller's scope.  
-These options objects can be passed as the `ya-sort` directive value on one or more instances of `ya-sort`
+These options objects can be passed as the `ya-sort` directive value to one or more instances of `ya-sort`
 ```Javascript
 module.controller('myController', function($scope) {
 	$scope.myOptions = {
