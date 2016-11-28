@@ -21,16 +21,12 @@ angular.module('demo', ['yaHTML5Sort'])
             return true;
         },
         candrop: function (item, source, target) {
-            var can = true;
             //any item can drop to it's own list
             if (source === target) 
-                can = true;
+                return true;
 
             //subitems cannot exit own list, combo cannot be dragged into combo
-            else if(item.subi || (item.sub && target.length > 0 && target[0].subi))
-                can = false;
-
-            return can;
+            return !(item.subi || (item.sub && target.length > 0 && target[0].subi));
         },
         oncopy: function (item, source, targetIndex, target) {
             item.id = Math.random();
@@ -40,7 +36,7 @@ angular.module('demo', ['yaHTML5Sort'])
             $scope.iscopy = true;
             $timeout(function () { $scope.iscopy = false;}, 0);
         },
-        onmove: function (item, souorce, targetIndex, target) {
+        onmove: function (item, source, targetIndex, target) {
             item.id = Math.random();
             if (target[0] && target[0].subi)
                 item.subi = true;

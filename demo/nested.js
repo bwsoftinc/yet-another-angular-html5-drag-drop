@@ -29,12 +29,12 @@ angular.module('demo', ['yaHTML5Sort'])
         }
     };
 
-    function searchfor(arr, item) {
-        if (arr === item)
+    function searchfor(arr, target) {
+        if (arr === target)
             return true;
 
         for (var i = 0; i < arr.length; i++)
-            if (arr[i].sub && searchfor(arr[i].sub.items, item))
+            if (arr[i].sub && searchfor(arr[i].sub.items, target))
                 return true;
 
         return false;

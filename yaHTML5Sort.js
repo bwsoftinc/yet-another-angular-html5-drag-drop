@@ -1,6 +1,6 @@
 'use strict';
 
-var yasortinstances = [{entercount: 0}];
+var yasortinstances = [{}];
 angular.module('yaHTML5Sort', [])
 .service('yaInstance', function () {
     var yasortroot = yasortinstances[0];    
@@ -13,6 +13,7 @@ angular.module('yaHTML5Sort', [])
                 op = scope[attrs.yaSort] || {},
                 match = attrs.ngRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+\|\s+([\s\S]+?))?(?:\s+as\s+([\s\S]+?))?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
 
+            options.entercount = 0;
             options.item = match[1];
             options.items = match[2];
             options.copy = op.oncopy !== undefined;
@@ -79,15 +80,15 @@ angular.module('yaHTML5Sort', [])
         removePlaceholder: function(preservecount) {
             if (yasortroot.placeholder && yasortroot.placeholder.parentNode) {
                 yasortroot.placeholder.parentNode.removeChild(yasortroot.placeholder);
-                yasortroot.placeholder = yasortroot.placeholder.cloneNode(false);
-                if(!preservecount) yasortroot.entercount = 0;
+                if (!preservecount) for (var i = 1; i < yasortinstances.length; i++)
+                    yasortinstances[i].entercount = 0;
             }
         }
     };
 })
 //has to run before ng-repeat (priority 1000) so ngRepeat directive can be sniffed and yaSort initialized before ngRepeat has a chance to remove this dom node
 //the ya-sort options are initialized for this instance and drag-drop events attached to the node containing (parent Element) the yaSort directive
-.directive('yaSort', ['$timeout', 'yaInstance', '$rootScope', function ($timeout, inst, rootscope) {
+.directive('yaSort', ['$rootScope', 'yaInstance', function (rootscope, inst) {
     return {
         priority: 1001,
         link: function (scope, element, attrs) {
@@ -102,12 +103,17 @@ angular.module('yaHTML5Sort', [])
             _container.addEventListener('dragstart', function (e) { e.preventDefault(); e.stopPropagation(); }, false);
             _container.addEventListener('dragend', function (e) { inst.removePlaceholder(); }, false);
             _container.addEventListener('dragenter', function (e) {
-                e.preventDefault(); e.stopPropagation();
-                yasortroot.entercount++;
+                e.preventDefault(); //e.stopPropagation();
+                options.entercount++;
+                //console.log(attrs.yaSort + ':enter:' + options.entercount);
+                //console.log(e.target)
             }, false);
             _container.addEventListener('dragleave', function (e) {
-                yasortroot.entercount--;
-                if (yasortroot.entercount === 0)
+                //e.preventDefault(); e.stopPropagation();
+                options.entercount--;
+                //console.log(attrs.yaSort + ':leave:' + options.entercount);
+                //console.log(e.target)
+                if (options.entercount === 0)
                     inst.removePlaceholder();
             }, false);
 
