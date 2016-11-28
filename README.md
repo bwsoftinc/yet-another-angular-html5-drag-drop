@@ -34,7 +34,7 @@ No dependency on jQuery.
 * [Nested Lists](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/nestedlist.html)
 * [Advanced Demo](https://bwsoftinc.github.io/yet-another-angular-html5-drag-drop/demo/demo.html)
 
-##Using the yaHTML5Sort module and ya-sort directive
+##Using the `yaHTML5Sort` module and `ya-sort` directive
 
 To use drag drop features, download yaHTML5Sort.js and add `yaHTML5Sort` module as a dependency in your angular module.
 ```Javascript
