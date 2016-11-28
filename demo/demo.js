@@ -21,20 +21,24 @@ angular.module('demo', ['yaHTML5Sort'])
             return true;
         },
         candrop: function (item, source, target) {
+            var can = true;
             //any item can drop to it's own list
             if (source === target) 
-                return true;
+                can = true;
 
             //subitems cannot exit own list, combo cannot be dragged into combo
             else if(item.subi || (item.sub && target.length > 0 && target[0].subi))
-                return false;
+                can = false;
 
-            return true;
+            return can;
         },
         oncopy: function (item, source, targetIndex, target) {
             item.id = Math.random();
             if (target[0] && target[0].subi)
                 item.subi = true;
+
+            $scope.iscopy = true;
+            $timeout(function () { $scope.iscopy = false;}, 0);
         },
         onmove: function (item, souorce, targetIndex, target) {
             item.id = Math.random();
@@ -43,11 +47,18 @@ angular.module('demo', ['yaHTML5Sort'])
         },
         onreplace: function (item, source, targetIndex, target) {
             item.id = Math.random();
-            if (target[0] && target[0].subi)
+            if (target[0] && target[0].subi) {
                 item.subi = true;
+                if (item.subi) {
+                    target[targetIndex + 1] = item;
+                    if(!$scope.iscopy)
+                        source.splice(source.indexOf(item), 1);
+                    return true;
+                }
+            }
         }
     };
-
+    $scope.iscopy = false;
     $scope.itemsper = 18;
     $scope.reload = function () {
         $scope.mealperiods = [];
