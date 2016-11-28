@@ -1,19 +1,9 @@
 'use strict';
 
-var yasortinstances = [{}];
+var yasortinstances = [{entercount: 0}];
 angular.module('yaHTML5Sort', [])
 .service('yaInstance', function () {
     var yasortroot = yasortinstances[0];    
-    function removePlaceholder(container) {
-        if (yasortroot.placeholder && yasortroot.placeholder.parentNode &&
-           (!container || yasortroot.placeholder.parentElement === container)) {
-            yasortroot.placeholder.parentNode.removeChild(yasortroot.placeholder);
-            yasortroot.placeholder = yasortroot.placeholder.cloneNode(false);
-
-            for (var i = 1; i < yasortinstances.length; i++)
-                yasortinstances[i].entercount = 0;
-        }
-    }
     return {
         get: function (index) {
             return yasortinstances[index];
@@ -23,7 +13,6 @@ angular.module('yaHTML5Sort', [])
                 op = scope[attrs.yaSort] || {},
                 match = attrs.ngRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+\|\s+([\s\S]+?))?(?:\s+as\s+([\s\S]+?))?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
 
-            options.entercount = 0;
             options.item = match[1];
             options.items = match[2];
             options.copy = op.oncopy !== undefined;
@@ -87,20 +76,11 @@ angular.module('yaHTML5Sort', [])
                 if (i.nodeType === 1) return i;
             return null;
         },
-        removePlaceholder: removePlaceholder,
-        attachPlaceholderEvents: function(options, container) {
-            if (!yasortroot.placeholder.parentNode) {
-                yasortroot.placeholder.addEventListener('dragenter', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    options.entercount++;
-                }, false);
-                yasortroot.placeholder.addEventListener('dragleave', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (--options.entercount === 0)
-                        removePlaceholder(container);
-                }, false);
+        removePlaceholder: function(preservecount) {
+            if (yasortroot.placeholder && yasortroot.placeholder.parentNode) {
+                yasortroot.placeholder.parentNode.removeChild(yasortroot.placeholder);
+                yasortroot.placeholder = yasortroot.placeholder.cloneNode(false);
+                if(!preservecount) yasortroot.entercount = 0;
             }
         }
     };
@@ -119,10 +99,17 @@ angular.module('yaHTML5Sort', [])
             element.parent().attr('ya-instance', attrs.yaSort);
             if (options.disabled) return;
 
-            _container.addEventListener('dragstart', function (e) { e.preventDefault(); }, false);
+            _container.addEventListener('dragstart', function (e) { e.preventDefault(); e.stopPropagation(); }, false);
             _container.addEventListener('dragend', function (e) { inst.removePlaceholder(); }, false);
-            _container.addEventListener('dragenter', function (e) { e.preventDefault(); options.entercount++; }, false);
-            _container.addEventListener('dragleave', function (e) { if (--options.entercount === 0) inst.removePlaceholder(_container); }, false);
+            _container.addEventListener('dragenter', function (e) {
+                e.preventDefault(); e.stopPropagation();
+                yasortroot.entercount++;
+            }, false);
+            _container.addEventListener('dragleave', function (e) {
+                yasortroot.entercount--;
+                if (yasortroot.entercount === 0)
+                    inst.removePlaceholder();
+            }, false);
 
             function findRepeat(item, upperhalf) {
                 var search = item;
@@ -166,7 +153,7 @@ angular.module('yaHTML5Sort', [])
                     e.dataTransfer.dropEffect = (e.ctrlKey && yasortroot.copy) ? 'copy' : 'move';
 
                 if ((e.shiftKey && options.replace) || notcompatible || containerhasitems)
-                    inst.removePlaceholder(_container);
+                    inst.removePlaceholder(true);
                 else if (item !== yasortroot.placeholder) {
                     var upperhalf = e.offsetY < item.offsetHeight / 2;
                     if (iscontainer && empty) item = item.firstElementChild;
@@ -179,7 +166,6 @@ angular.module('yaHTML5Sort', [])
                     if (item !== null) {
                         var notprevious = inst.previousElementSibling(item) !== yasortroot.placeholder;
                         var notnext = inst.nextElementSibling(item) !== yasortroot.placeholder;
-                        inst.attachPlaceholderEvents(options, _container);
 
                         if (sortitem || (notnext && notprevious)) {
                             if (upperhalf) {
