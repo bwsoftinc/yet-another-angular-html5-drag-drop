@@ -73,7 +73,7 @@ module.controller('myController', function($scope) {
 | dragSourceItemClass  | string  | null    | A class applied to the original item while dragging    |
 | dragItemClass        | string  | null    | A class applied to the dragging item while dragging    |
 | dropPlaceholderClass | string  | null    | A class applied to the drop placeholder while dragging |
-| dropTargetItemClass  | string  | null    | A class appleid to the drop target while dragging      |
+| dropTargetItemClass  | string  | null    | A class applied to the drop target while dragging      |
 
 ###Define one or more of these callback function prototypes
 
