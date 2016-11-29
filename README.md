@@ -1,4 +1,4 @@
-#yet-another-angular-html5-drag-drop
+#**yet-another-angular-html5-drag-drop**
 
 [**See live demos**](#live-demos)  
 Angular directive to enable drag and drop features on ng-repeat collections.  
