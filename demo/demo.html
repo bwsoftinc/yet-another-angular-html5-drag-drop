@@ -22,6 +22,8 @@
                 {{'day' + $index}}
                 <div class="boxwrapper" ng-repeat="item in day track by item.id" ya-sort="sortoptions">
                     <div class="box">
+                        <span title="context" ng-click="showContext($event, item, this)">▼</span>
+                        <span title="expand" ng-if="item.sub" ng-click="item.exp=!item.exp">⇅</span>
                         <span class="handle">☰</span>{{::item.name}}
                         <div class="context" ng-if="item.context">
                             <div ng-if="!item.sub" ng-click="makeCombo(item)">make combo</div>
@@ -29,21 +31,19 @@
                             <div ng-click="makeCopy(item, day)">copy</div>
                             <div ng-click="removeItem(item, day)">delete</div>
                         </div>
-                        <span title="context" ng-click="showContext($event, item, this)">▼</span>
-                        <span title="expand" ng-if="item.sub" ng-click="item.exp=!item.exp">⇅</span>
                         <div ng-if="item.exp">
                             <div class="boxwrapper">
                                 <div class="box">{{::item.sub[0].name}}</div>
                             </div>
                             <div class="boxwrapper" ya-sort="sortoptions" ng-repeat="subi in item.sub | notfirst track by subi.id">
                                 <div class="box">
+                                    <span title="context" ng-click="showContext($event, subi, this)">▼</span>
                                     <span class="handle">☰</span>{{::subi.name}}
                                     <div class="context" ng-if="subi.context">
                                         <div>edit</div>
                                         <div ng-click="makeCopy(subi, item.sub)">copy</div>
                                         <div ng-click="removeItem(subi, item.sub)">delete</div>
-                                    </div>
-                                    <span title="context" ng-click="showContext($event, subi, this)">▼</span>
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
