@@ -5,14 +5,17 @@ if (typeof yaloadonce_cada367e228644d8b17a7162c125d8e2 !== 'undefined')
 
 var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
 (function () {
-    var root = {}, instances = [root];
+    var root = {}, instances = [];
 
     function addClass(node, name) {
         if (name && (name = name.trim())) {
             var classes = (node.getAttribute('class') || '').replace(/[\n\t]/g, ' ').trim();
-            if ((' ' + classes + ' ').indexOf(' ' + name + ' ') === -1)
+            if ((' ' + classes + ' ').indexOf(' ' + name + ' ') === -1) {
                 node.setAttribute('class', classes + ' ' + name);
+                return true;
+            }
         }
+        return false;
     }
 
     function removeClass(node, name) {
@@ -216,7 +219,7 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
     }])
     //runs after ngrepeat for each repeated item, may not run at all if the ngrepeat array is empty
     //attaches drag-drop events to the repeated item(s), ng-include runs at 400 priority so that needs to run first too
-    .directive('yaSort', ['$rootScope', function (rootscope) {
+    .directive('yaSort', ['$rootScope', '$timeout', function (rootscope, $timeout) {
         return {
             priority: 399,
             restrict: 'A',
@@ -339,7 +342,6 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
 
                 _element.addEventListener('dragend', function (e) {
                     e.preventDefault();
-                    if (!root.sourceItem) return;
                     removePlaceholder();
                     instance.entercount = hovercount = 0;
                     removeClass(_element, instance.dragSourceItemClass);
