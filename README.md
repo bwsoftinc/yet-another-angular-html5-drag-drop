@@ -111,9 +111,9 @@ Remarks
 
 Remarks
 * Default action is removing `item` from `sourceArray` and inserting to `targetArray` at `targetIndex`.
-* Define `onmove` to perform additional actions such as calling a webapi and updating this or other item properties in the arrays.
-* Javascript function parameters are not by reference so update `item`'s properties freely, assiging `item` to another object in `onmove` will not work.
-* Return true to then proceed with the default action.
+* Define `onmove` to perform additional actions such as calling a webapi and updating `item` properties or other item properties in the arrays.
+* Javascript function parameters are not by reference so update `item`'s properties freely, assigning `item` to another object in `onmove` will not work.
+* Return false to then proceed with the default action.
 * If the default action is undesirable then return true signaling the default action was handled in user code.
 
 ####`oncopy(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
@@ -144,8 +144,8 @@ Remarks
 
 Remarks
 * Defining the `onreplace` function enables the replace (_shift+drag_) feature.
-* Default action is removing the original `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`.
-* When both `oncopy` and `onreplace` functions are defined and the user action (_control+shift+drag_) makes use of both features, then both `oncopy` and `onreplace` callbacks will be triggered with `oncopy` being first.
+* Default action is removing `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`.
+* When both `oncopy` and `onreplace` functions are defined and the user action (_control+shift+drag_) makes use of both features, then the default action will not remove `item` from `sourceArray`.
 
 ##License
 
