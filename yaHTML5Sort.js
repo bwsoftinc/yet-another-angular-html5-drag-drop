@@ -64,7 +64,7 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
 
     function isPlaceholderNeighbor() {
         return root.placeholder === root.sourceNode.previousElementSibling
-            || root.placeholder === root.sourceNode.nextElementSibling 
+            || root.placeholder === root.sourceNode.nextElementSibling;
     }
 
     function placeholderIndex() {
@@ -128,6 +128,7 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
         .directive('yaSort', ['$rootScope', function (rootscope) {
         return {
             priority: 1001,
+            restrict: 'A',
             link: function (scope, element, attrs) {
                 var container = element[0].parentNode, instance = init(scope, attrs);
 
@@ -257,15 +258,13 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
                                 if (!instance.oncopy(copy, root.sourceArray, scope.$index, instance.itemArray) &&
                                     !instance.onreplace(copy, root.sourceArray, scope.$index, instance.itemArray))
                                     instance.itemArray[scope.$index] = copy;
-
-                                apply(rootscope);
                             } else {
                                 if (!instance.onreplace(root.sourceItem, root.sourceArray, scope.$index, instance.itemArray)) {
                                     instance.itemArray[scope.$index] = root.sourceItem;
                                     root.sourceArray.splice(root.sourceArray.indexOf(root.sourceItem), 1);
                                 }
-                                apply(rootscope);
                             }
+                            apply(rootscope);
                         }
                     } else if (root.placeholder.parentNode) {
                         var index = placeholderIndex();
@@ -296,9 +295,7 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
                         root.mouseTarget = root.mouseTarget.parentElement;
 
                     root.mouseTarget = null;
-                    if (!handle)
-                        e.preventDefault();
-
+                    if (!handle) e.preventDefault();
                     return handle;
                 }
 
