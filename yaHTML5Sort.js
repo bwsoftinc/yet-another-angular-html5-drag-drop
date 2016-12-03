@@ -158,17 +158,22 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
                         containerhasitems = iscontainer && !empty,
                         notcompatible = !instance.candrop(root.sourceItem, root.sourceArray, instance.itemArray);
 
+                    var layer = 0;
                     if (!iscontainer)
-                        while (item.parentElement !== container)
+                        while (item.parentElement !== container) {
                             item = item.parentElement;
+                            layer++;
+                        }
 
                     if (notcompatible || containerhasitems || (instance.replace && e.shiftKey && item === root.sourceNode))
                         e.dataTransfer.dropEffect = 'none';
                     else
                         e.dataTransfer.dropEffect = (e.ctrlKey && root.copy) ? 'copy' : 'move';
 
-                    if ((e.shiftKey && instance.replace) || notcompatible || containerhasitems)
+                    if ((e.shiftKey && instance.replace) || notcompatible || containerhasitems) {
                         removePlaceholder();
+                        instance.entercount = layer + 1;
+                    }
                     else if (item !== root.placeholder) {
                         var upperhalf = e.offsetY < item.offsetHeight / 2;
                         if (iscontainer && empty) item = item.firstChild;
@@ -332,7 +337,7 @@ var yaloadonce_cada367e228644d8b17a7162c125d8e2 = true;
                     if (root.sourceItem && instance.dropTargetItemClass && instance.candrop(root.sourceItem, root.sourceArray, instance.itemArray)) {
                         if (instance.replace && e.shiftKey && _element !== root.sourceNode)
                             addClass(_element, instance.dropTargetItemClass);
-                        else
+                        else 
                             removeClass(_element, instance.dropTargetItemClass);
                     }
                 }, false);
