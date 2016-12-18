@@ -89,6 +89,7 @@ module.controller('myController', function($scope) {
 | return       | boolean | Whether dragging should commence for this item         |
 
 Remarks
+
 * If not defined dragging will be allowed on any `ya-sort` item.
 
 #### `candrop(item, sourceArray, targetArray)` triggered ondragover event
@@ -101,6 +102,7 @@ Remarks
 | return       | boolean | Whether the drop should be allowed here                |
 
 Remarks
+
 * If not defined dropping will be allowed in any `ya-sort` instance.
 	
 #### `onmove(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
@@ -114,6 +116,7 @@ Remarks
 | return       | boolean | Whether default action was handled                     |
 
 Remarks
+
 * Default action is removing `item` from `sourceArray` and inserting to `targetArray` at `targetIndex`.
 * Define `onmove` to perform additional actions such as calling a webapi and updating `item` properties or other item properties in the arrays.
 * Javascript function parameters are not by reference so update `item`'s properties freely, assigning `item` to another object in `onmove` will not work.
@@ -131,6 +134,7 @@ Remarks
 | return       | boolean | Whether default action was handled                     |
 
 Remarks
+
 * Defining the `oncopy` function enables the copy (_control+drag_) feature.
 * Here, `item` is already a copy so properties can be updated and will only affect the target and not the original.
 * Default action is inserting the copy of `item` into `targetArray` at `targetIndex`.
@@ -147,6 +151,7 @@ Remarks
 | return       | boolean | Whether default action was handled                     |
 
 Remarks
+
 * Defining the `onreplace` function enables the replace (_shift+drag_) feature.
 * Default action is removing `item` from `sourceArray`, removing the target item at `targetIndex` from `targetArray` and inserting `item` into `targetArray` at `targetIndex`.
 * When both `oncopy` and `onreplace` functions are defined and the user action (_control+shift+drag_) makes use of both features, then the default action will not remove `item` from `sourceArray`.
