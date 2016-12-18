@@ -1,8 +1,0 @@
-title: Yet another angular html5 drag drop
-description: Drag drop sort directive for angular
-google_analytics: 
-show_downloads: true
-theme: jekyll-theme-architect
-
-gems:
-  - jekyll-mentions
