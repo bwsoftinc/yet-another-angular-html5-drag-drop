@@ -37,16 +37,19 @@ No dependency on jQuery.
 ## Using the `yaHTML5Sort` module and `ya-sort` directive
 
 To use drag drop features, download yaHTML5Sort.js and add `yaHTML5Sort` module as a dependency in your angular module.
+
 ```JavaScript
  var module = angular.module('myModule', ['yaHTML5Sort']);
 ```
 
 On the element containing the ng-repeat directive, add the `ya-sort` directive
+
 ```HTML
 <div ng-repeat="item in items" ya-sort>
 ```
 
 Supply options by adding a value to the `ya-sort` directive
+
 ```HTML
 <div ng-repeat="item in items" ya-sort="myOptions">
 ```
@@ -55,6 +58,7 @@ Supply options by adding a value to the `ya-sort` directive
 
 Declare one or more options objects on the angular controller's scope.  
 These options objects can be passed as the `ya-sort` directive value to one or more instances of `ya-sort`
+
 ```JavaScript
 module.controller('myController', function($scope) {
 	$scope.myOptions = {
