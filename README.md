@@ -67,7 +67,7 @@ module.controller('myController', function($scope) {
 ### Define one or more of these property values, if not defined the default will be used
 
 | Option Values        | Type	 | Default | Description
-| ---------------------|---------|---------|--------------------------------------------------------|
+| :------------------- | :------ | :------ | :----------------------------------------------------- |
 | disabled             | boolean | false   | Whether `ya-sort` directive features are disabled      |
 | dragHandleClass      | string  | null    | A class used to denote the items' drag handles         |
 | dragSourceItemClass  | string  | null    | A class applied to the original item while dragging    |
@@ -80,7 +80,7 @@ module.controller('myController', function($scope) {
 #### `candrag(item)` triggered ondragstart event
 
 | Parameter    | Type    | Description                                            |
-|--------------|---------|--------------------------------------------------------|
+| :----------- | :------ | :----------------------------------------------------- |
 | item         | object  | The object model of the item attempting to be dragged  |
 | return       | boolean | Whether dragging should commence for this item         |
 
@@ -90,7 +90,7 @@ Remarks
 #### `candrop(item, sourceArray, targetArray)` triggered ondragover event
 
 | Parameter    | Type    | Description                                            |
-|--------------|---------|--------------------------------------------------------|
+| :----------- | :------ | :----------------------------------------------------- |
 | item         | object  | The object model of the item being dragged             |
 | sourceArray  | array   | The array model that contains `item`                   |
 | targetArray  | array   | The array model where `item` would be dropped          |
@@ -102,7 +102,7 @@ Remarks
 #### `onmove(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
-|--------------|---------|--------------------------------------------------------|
+| :----------- | :------ | :----------------------------------------------------- |
 | item         | object  | The object model of the item being dropped             |
 | sourceArray  | array   | The array model that contains `item`                   |
 | targetIndex  | int     | The index in `targetArray` where move is being placed  |
@@ -119,7 +119,7 @@ Remarks
 #### `oncopy(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
-|--------------|---------|--------------------------------------------------------|
+| :----------- | :------ | :----------------------------------------------------- |
 | item         | object  | A copy of the object model of the item being dropped   |
 | sourceArray  | array   | The array model that contains the original `item`      |
 | targetIndex  | int     | The index in `targetArray` where copy is being placed  |
@@ -135,7 +135,7 @@ Remarks
 #### `onreplace(item, sourceArray, targetIndex, targetArray)` triggered ondrop event
 
 | Parameter    | Type    | Description                                            |
-|--------------|---------|--------------------------------------------------------|
+| :----------- | :------ | :----------------------------------------------------- |
 | item         | object  | The object model of the item being dropped             |
 | sourceArray  | array   | The array model that contains `item`                   |
 | targetIndex  | int     | The index in `targetArray` where replace is being made |
