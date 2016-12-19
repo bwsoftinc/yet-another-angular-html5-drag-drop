@@ -1,3 +1,5 @@
 markdown: kramdown
 highlighter: rouge
+kramdown:
+  syntax_highlighter: rouge
 theme: jekyll-theme-architect
