@@ -88,6 +88,7 @@ module.controller('myController', function($scope) {
 | item         | object  | The object model of the item attempting to be dragged  |
 | return       | boolean | Whether dragging should commence for this item         |
 
+
 Remarks
 
 * If not defined dragging will be allowed on any `ya-sort` item.
@@ -100,6 +101,7 @@ Remarks
 | sourceArray  | array   | The array model that contains `item`                   |
 | targetArray  | array   | The array model where `item` would be dropped          |
 | return       | boolean | Whether the drop should be allowed here                |
+
 
 Remarks
 
@@ -114,6 +116,7 @@ Remarks
 | targetIndex  | int     | The index in `targetArray` where move is being placed  |
 | targetArray  | array   | The array model where `item` is being dropped          |
 | return       | boolean | Whether default action was handled                     |
+
 
 Remarks
 
@@ -133,6 +136,7 @@ Remarks
 | targetArray  | array   | The array model where `item` is being dropped          |
 | return       | boolean | Whether default action was handled                     |
 
+
 Remarks
 
 * Defining the `oncopy` function enables the copy (_control+drag_) feature.
@@ -149,6 +153,7 @@ Remarks
 | targetIndex  | int     | The index in `targetArray` where replace is being made |
 | targetArray  | array   | The array model where `item` is being dropped          |
 | return       | boolean | Whether default action was handled                     |
+
 
 Remarks
 
